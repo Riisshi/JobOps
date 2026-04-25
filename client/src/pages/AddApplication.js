@@ -12,7 +12,7 @@ function AddApplication() {
     e.preventDefault();
     try {
       // 2. Send the email to the backend
-      await axios.post("http://localhost:5000/api/applications", {
+      await axios.post("https://jobops-ts7r.onrender.com/api/applications", {
         company,
         role,
         email, 
