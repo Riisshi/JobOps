@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import dotenv from "dotenv";
 
 function AddApplication() {
   const [company, setCompany] = useState("");
@@ -12,7 +13,7 @@ function AddApplication() {
     e.preventDefault();
     try {
       // 2. Send the email to the backend
-      await axios.post("https://jobops-ts7r.onrender.com/api/applications", {
+      await axios.post(`${process.env.REACT_APP_API_URL}api/applications`, {
         company,
         role,
         email, 

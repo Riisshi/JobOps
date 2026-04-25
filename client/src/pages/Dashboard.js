@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import dotenv from "dotenv";
 
 function Dashboard() {
   const [apps, setApps] = useState([]);
@@ -31,7 +32,7 @@ function Dashboard() {
 
   const fetchStreak = async () => {
     try {
-      const res = await axios.get("https://jobops-ts7r.onrender.com/api/applications/streak");
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/applications/streak`);
       setStreak(res.data.streak);
     } catch (err) {
       console.error("Streak fetch failed");
@@ -40,7 +41,7 @@ function Dashboard() {
 
   const fetchApps = async () => {
     try {
-      const res = await axios.get("https://jobops-ts7r.onrender.com/api/applications");
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/applications`);
       setApps(res.data);
     } catch (err) {
       setError("Failed to load applications. Is the server running?");
@@ -49,7 +50,7 @@ function Dashboard() {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get("https://jobops-ts7r.onrender.com/api/applications/stats");
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/applications/stats`);
       setStats(res.data);
     } catch (err) {
       console.error("Stats fetch failed");
@@ -58,7 +59,7 @@ function Dashboard() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      await axios.put(`https://jobops-ts7r.onrender.com/api/applications/${id}/status`, { status: newStatus });
+      await axios.put(`${process.env.REACT_APP_API_URL}api/applications/${id}/status`, { status: newStatus });
       refreshData(); 
     } catch (err) {
       alert("Error updating status");
@@ -68,7 +69,7 @@ function Dashboard() {
   const handleFollowUp = async (id) => {
     try {
       setLoading(true);
-      await axios.post(`https://jobops-ts7r.onrender.com/api/applications/${id}/send-followup`);
+      await axios.post(`${process.env.REACT_APP_API_URL}api/applications/${id}/send-followup`);
       alert("Follow-up email sent successfully!");
       refreshData(); 
     } catch (err) {
