@@ -1,0 +1,7 @@
+# .vercelignore
+server/
+node_modules/
+*.md
+.gitignore
+backend/
+**/*.test.js
