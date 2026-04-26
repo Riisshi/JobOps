@@ -20,19 +20,18 @@ function Dashboard() {
   };
 
   useEffect(() => {
+    const refreshData = async () => {
+      setLoading(true);
+      await Promise.all([fetchApps(), fetchStats(), fetchStreak()]);
+      setLoading(false);
+    };
+
     refreshData();
   }, []);
 
-  const refreshData = async () => {
-    setLoading(true);
-    // Promise.all runs all three requests at the same time for better performance
-    await Promise.all([fetchApps(), fetchStats(), fetchStreak()]);
-    setLoading(false);
-  };
-
   const fetchStreak = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/applications/streak`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/applications/streak`);
       setStreak(res.data.streak);
     } catch (err) {
       console.error("Streak fetch failed");
@@ -41,7 +40,7 @@ function Dashboard() {
 
   const fetchApps = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/applications`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/applications`);
       setApps(res.data);
     } catch (err) {
       setError("Failed to load applications. Is the server running?");
@@ -50,7 +49,7 @@ function Dashboard() {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/applications/stats`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/applications/stats`);
       setStats(res.data);
     } catch (err) {
       console.error("Stats fetch failed");
@@ -59,7 +58,7 @@ function Dashboard() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      await axios.put(`${process.env.REACT_APP_API_URL}api/applications/${id}/status`, { status: newStatus });
+      await axios.put(`${process.env.REACT_APP_API_URL}/applications/${id}/status`, { status: newStatus });
       refreshData(); 
     } catch (err) {
       alert("Error updating status");
@@ -69,7 +68,7 @@ function Dashboard() {
   const handleFollowUp = async (id) => {
     try {
       setLoading(true);
-      await axios.post(`${process.env.REACT_APP_API_URL}api/applications/${id}/send-followup`);
+      await axios.post(`${process.env.REACT_APP_API_URL}/applications/${id}/send-followup`);
       alert("Follow-up email sent successfully!");
       refreshData(); 
     } catch (err) {
