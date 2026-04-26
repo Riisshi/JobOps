@@ -19,15 +19,17 @@ function Dashboard() {
     border: "1px solid #eee"
   };
 
-  useEffect(() => {
-   refreshData();
-  }, [refreshData]);
+  
 
   const refreshData = useCallback(async () => {
     setLoading(true);
     await Promise.all([fetchApps(), fetchStats(), fetchStreak()]);
     setLoading(false);
   }, []);
+
+  useEffect(() => {
+   refreshData();
+  }, [refreshData]);
 
   const fetchStreak = async () => {
     try {
