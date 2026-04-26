@@ -80,6 +80,15 @@ function Dashboard() {
     }
   };
 
+  const getFollowUpText = (dateString) => {
+    if (!dateString) return "";
+    const diff = Math.ceil((new Date(dateString) - new Date()) / (1000 * 60 * 60 * 24));
+    
+    if (diff > 0) return `Next follow-up in ${diff} days`;
+    if (diff === 0) return "🚀 Due TODAY";
+    return `⚠️ Overdue by ${Math.abs(diff)} days`;
+  };
+
   const isDueTodayOrBefore = (dateString) => {
     if (!dateString) return false;
     const followUpDate = new Date(dateString);
@@ -114,13 +123,43 @@ function Dashboard() {
         </select>
 
         {app.status === 'applied' && (
+          <>
+          <button 
+            onClick={() => handleStatusChange(app._id, 'interview')}
+            style={{ 
+              marginLeft: "10px", 
+              backgroundColor: "#2ecc71", 
+              color: "white", 
+              border: "none", 
+              padding: "6px 12px", 
+              borderRadius: "4px", 
+              cursor: "pointer",
+              fontWeight: "bold" 
+            }}
+          >
+            🏆 Got a Response!
+          </button>
+
           <button 
             onClick={() => handleFollowUp(app._id)}
-            style={{ backgroundColor: "#3498db", color: "white", border: "none", padding: "6px 12px", borderRadius: "4px", cursor: "pointer" }}
+            style={{ 
+              marginLeft: "10px", 
+              backgroundColor: "#3498db", 
+              color: "white", 
+              border: "none", 
+              padding: "6px 12px", 
+              borderRadius: "4px", 
+              cursor: "pointer" 
+            }}
           >
             📩 Send Follow-up
           </button>
+          </>
         )}
+
+        <p style={{ fontSize: "0.8rem", color: "#7f8c8d" }}>
+          {app.status === 'applied' ? getFollowUpText(app.nextFollowUpDate) : "Pipeline Closed"}
+        </p>
       </div>
     </div>
   );
