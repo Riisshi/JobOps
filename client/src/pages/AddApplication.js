@@ -13,7 +13,7 @@ function AddApplication() {
     e.preventDefault();
     try {
       // 2. Send the email to the backend
-      await axios.post(`${process.env.REACT_APP_API_URL}api/applications`, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/applications`, {
         company,
         role,
         email, 
