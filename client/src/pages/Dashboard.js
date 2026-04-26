@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
 
@@ -20,13 +20,13 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    const refreshData = async () => {
-      setLoading(true);
-      await Promise.all([fetchApps(), fetchStats(), fetchStreak()]);
-      setLoading(false);
-    };
+   refreshData();
+  }, [refreshData]);
 
-    refreshData();
+  const refreshData = useCallback(async () => {
+    setLoading(true);
+    await Promise.all([fetchApps(), fetchStats(), fetchStreak()]);
+    setLoading(false);
   }, []);
 
   const fetchStreak = async () => {
