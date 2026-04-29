@@ -26,7 +26,7 @@ function Register() {
     if (oauthState === "error") {
       setError(oauthMessage || "Google sign-up failed.");
     }
-  }, []);
+  }, [navigate]);
 
   const handleGoogleRegister = async () => {
     setError("");
