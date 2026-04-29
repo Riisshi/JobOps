@@ -25,7 +25,7 @@ function Login() {
     if (oauthState === "error") {
       setError(oauthMessage || "Google sign-in failed.");
     }
-  }, []);
+  }, [navigate]);
 
   const handleGoogleLogin = async () => {
     setError("");
