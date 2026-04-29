@@ -1,68 +1,139 @@
-# 🏗️ JobOps: Automated Outreach & Career System
+# JobOps
 
-**JobOps** is a full-stack job acquisition system designed to turn the passive act of "tracking" into the active habit of **executing**. It replaces messy spreadsheets with a high-performance workflow engine that manages the entire lifecycle of a job application.
+JobOps is a full-stack job hunt operating system focused on execution, not just tracking.
 
----
+It combines application pipeline management, follow-up automation, Gmail reply sync, smart prioritization, review workflows, and analytics in one workspace.
 
-## 🚀 Why this project is different
-Most job trackers are just CRUD apps. **JobOps** is a system built with logic-driven features to increase interview rates:
+## What is implemented
 
-* **One-Click Execution:** Integrated with the **SendGrid Mail API** to send outreach and follow-up emails directly from the dashboard.
-* **Behavioral Pressure:** A custom **Streak System** algorithm that tracks daily application consistency to prevent "slacking."
-* **Automated Scheduling:** A backend "Follow-up Engine" that calculates and sets next-action dates based on user interaction.
-* **Decision Analytics:** Real-time calculation of **Response Rates** and **Action Priorities** to help developers pivot their strategy.
+- Auth
+  - Email/password login and register
+  - Google OAuth login/register
+  - JWT-protected APIs
 
----
+- Application system
+  - Create, update, delete applications
+  - Status pipeline: applied, interview, offer, rejected
+  - Notes, interview date/stage, job links, resume/cover letter links
+  - Dedicated application detail page with timeline
 
-## 🛠️ The Tech Stack
-* **Frontend:** React.js (State management & Derived data filtering)
-* **Backend:** Node.js & Express (RESTful API & Email Service)
-* **Database:** MongoDB (Mongoose ODM for relational modeling)
-* **Third-Party API:** SendGrid (SMTP Automation)
-* **Deployment:** Vercel (Frontend) & Render (Backend)
+- Follow-up engine
+  - Follow-up cooldown/scheduling rules
+  - Follow-up history tracking
+  - Priority scoring and next-action logic
+  - Rule-based follow-up suggestions
 
----
+- Gmail integration (free mode)
+  - Connect Gmail with OAuth
+  - Sync recruiter replies from Gmail
+  - Confidence-based matching
+  - Review queue for low-confidence matches
+  - Confirm/ignore workflow with audit trail
+  - Duplicate protection for processed message IDs
+  - Last sync diagnostics
 
-## 🧠 Engineering Highlights
+- Intelligence and reporting
+  - Dashboard KPIs
+  - Weekly report snapshot
+  - Funnel and follow-up impact analytics
+  - Company response signals
+  - CSV export
+  - Print-ready HTML report for PDF export
 
-### 1. The State-Machine Workflow
-The system doesn't just store data; it manages states. Transitions from `Applied` → `Interview` → `Offer` trigger different logic in the analytics and follow-up engine.
+- Product hardening
+  - First-run onboarding checklist
+  - Consistent feedback/error messaging layer
+  - Integrations control page
 
-### 2. Date Comparison Logic
-Handled timezone-resilient date comparisons by stripping time-bits to ensure "Follow-up Due" warnings are accurate across different browser locales.
+## Tech stack
 
-### 3. Streak Algorithm
-Implemented a `Set`-based lookup algorithm to iterate through historical application timestamps and calculate consecutive active days with $O(n)$ efficiency.
+- Frontend: React
+- Backend: Node.js, Express
+- Database: MongoDB + Mongoose
+- Mail sending: SendGrid
+- OAuth: Google OAuth 2.0
 
----
+## Local setup
 
-## 📸 Screenshots
-*(Add your screenshots here after deployment)*
-* *Main Dashboard with Streak & Stats*
-* *Action Required section with the Email Trigger*
-* *The "Add Application" flow*
+### 1) Backend
 
----
+```bash
+cd server
+npm install
+```
 
-## ⚙️ Installation & Setup
+Create `server/.env`:
 
-### 1. Setup Backend
-1.  Navigate to `/server`
-2.  Run `npm install`
-3.  Create a `.env` file with:
-    ```env
-    MONGO_URI=your_mongodb_uri
-    SENDGRID_API_KEY=your_key
-    EMAIL_FROM=your_verified_email
-    ```
-4.  Run `npm start`
+```env
+MONGO_URI=your_mongodb_uri
+PORT=5000
+JWT_SECRET=your_jwt_secret
 
-### 2. Setup Frontend
-1.  Navigate to `/client`
-2.  Run `npm install`
-3.  Run `npm start`
+SENDGRID_API_KEY=your_sendgrid_key
+EMAIL_FROM=your_verified_sender
 
----
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
 
-## 👨‍💻 Author
-**RishiKhanth** *Full-Stack Developer*
+# Gmail integration callback
+GOOGLE_REDIRECT_URI=https://jobops-ts7r.onrender.com/api/automation/gmail/callback
+
+# Login/Register OAuth callback
+GOOGLE_AUTH_REDIRECT_URI=https://jobops-ts7r.onrender.com/api/auth/google/callback
+
+# Frontend base URL for OAuth redirect
+FRONTEND_URL=https://jobops-ts7r.onrender.com
+```
+
+> **For Production Deployment:** Update the above environment variables to use your production URLs (e.g., `https://your-domain.com/api/...`) in your hosting platform's environment variables.
+
+Run backend:
+
+```bash
+npm start
+```
+
+### 2) Frontend
+
+```bash
+cd client
+npm install
+npm start
+```
+
+Frontend runs at `http://localhost:3000`
+
+## Google OAuth setup (required)
+
+In Google Cloud Console:
+
+1. Create OAuth client (Web application)
+2. Add these Authorized redirect URIs exactly:
+   - `https://jobops-ts7r.onrender.com/api/auth/google/callback`
+   - `https://jobops-ts7r.onrender.com/api/automation/gmail/callback`
+3. Enable Gmail API
+4. In OAuth consent screen (Testing mode), add your email under Test users
+
+## Useful scripts
+
+From repo root:
+
+```bash
+node scripts/stress-test.js
+node scripts/system-validation.js
+```
+
+## Notes
+
+- Gmail integration in this project is designed for local/testing workflows and free-mode constraints.
+- AI/paid integrations are intentionally removed from active flow.
+
+## Push to GitHub
+
+```bash
+git add .
+git status
+git commit -m "Polish UI/UX, harden onboarding/feedback, add OAuth + system validation updates"
+git push origin <your-branch>
+```
+
