@@ -65,7 +65,7 @@ npm install
 Create `server/.env`:
 
 ```env
-MONGO_URI=your_mongodb_uri
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.example.mongodb.net/<dbname>?retryWrites=true&w=majority
 PORT=5000
 JWT_SECRET=your_jwt_secret
 
@@ -85,7 +85,7 @@ GOOGLE_AUTH_REDIRECT_URI=https://jobops-ts7r.onrender.com/api/auth/google/callba
 FRONTEND_URL=https://jobops-ts7r.onrender.com
 ```
 
-> **For Production Deployment:** Update the above environment variables to use your production URLs (e.g., `https://your-domain.com/api/...`) in your hosting platform's environment variables.
+> **For Production Deployment:** Do not commit `.env` to source control. Use your hosting platform's environment variable settings to provide a valid `MONGO_URI` and other secrets. The error shown during deployment means the configured MongoDB host could not be resolved, so double-check the Atlas cluster hostname and credentials. Update the above environment variables to use your production URLs (e.g., `https://your-domain.com/api/...`) in your hosting platform's environment variables.
 
 Run backend:
 

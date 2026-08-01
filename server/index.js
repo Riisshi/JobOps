@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -8,11 +9,7 @@ const reminderRoutes = require("./routes/reminderRoutes");
 const automationRoutes = require("./routes/automationRoutes");
 const publicRoutes = require("./routes/publicRoutes");
 
-
-dotenv.config();
-
-// Debug: Log environment variables at startup
-
+dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 connectDB();
 
